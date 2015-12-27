@@ -1,4 +1,4 @@
-NAME=logspout
+NAME=logspout11
 VERSION=$(shell cat VERSION)
 
 dev:
