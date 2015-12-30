@@ -55,20 +55,31 @@ func normalID(id string) string {
 
 func ignoreContainer(container *docker.Container) bool {
 	for _, kv := range container.Config.Env {
-		var ignoreVal string
-		if os.Getenv("IGNORE") != "" {
-			ignoreVal = os.Getenv("IGNORE")
+		
+		var acceptLogId string
+
+		// Only read Logs from Container that have the Build Id set to this value
+		if os.Getenv("ACCEPTLOGID") != "" {
+			acceptLogId = os.Getenv("ACCEPTLOGID")
 		}	
+
 		
 		kvp := strings.SplitN(kv, "=", 2)
 		log.Println("Key = ", kvp[0])
 		log.Println("Value = ", kvp[1])
-		if kvp[0] == "IGNORE" && strings.ToLower(kvp[1]) != ignoreVal {
+
+		/* Read the LOGID Environment variable of a Container and check if its the one for
+		which the logs need to be read. Ignore the container which do not match the ACCEPTLOGID.
+		If the Container has LOGSPOUT=ignore set, then ignore it as well.
+		*/
+		if kvp[0] == "LOGID" && strings.ToLower(kvp[1]) != acceptLogId {
+			return true 
+		} else if kvp[0] == "LOGSPOUT" && strings.ToLower(kvp[1]) != "ignore" {
 			return true 
 		}
 		
 	}
-	return  false
+	return false
 }
 
 type update struct {
