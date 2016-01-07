@@ -72,13 +72,13 @@ func ignoreContainer(container *docker.Container) bool {
 		/* Read the LOGID Environment variable of a Container and check if its the one for
 		which the logs need to be read. Ignore the container which do not match the ACCEPTLOGID.
 		If the Container has LOGSPOUT=ignore set, then ignore it as well.
-		*/
-		//if kvp[0] == "LOGID" && strings.ToLower(kvp[1]) != acceptLogId {
-		//	//log.Println("The logs from this container will NOT be passed to logstash")			
-		//	return true 
-		//} 
+		
+		if kvp[0] == "LOGID" && strings.ToLower(kvp[1]) != acceptLogId {
+			//log.Println("The logs from this container will NOT be passed to logstash")			
+			return true 
+		} */
 
-		if kvp[0] == "LOGSPOUT" && strings.ToLower(kvp[1]) != "ignore" {
+		if kvp[0] == "LOGSPOUT" && strings.ToLower(kvp[1]) == "ignore" {
 			return true 
 		}
 		
