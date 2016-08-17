@@ -64,10 +64,33 @@ func logDriverSupported(container *docker.Container) bool {
 
 func ignoreContainer(container *docker.Container) bool {
 	for _, kv := range container.Config.Env {
+		
+		//var acceptLogId string
+
+		// Only read Logs from Container that have the Build Id set to this value
+		//if os.Getenv("ACCEPTLOGID") != "" {
+	       // 		acceptLogId = os.Getenv("ACCEPTLOGID")
+ 			//log.Println("Accept the logs from : ", acceptLogId)
+	//	}	
+
+		
 		kvp := strings.SplitN(kv, "=", 2)
-		if len(kvp) == 2 && kvp[0] == "LOGSPOUT" && strings.ToLower(kvp[1]) == "ignore" {
-			return true
+		//log.Println("Key = ", kvp[0])
+		//log.Println("Value = ", kvp[1])
+
+		/* Read the LOGID Environment variable of a Container and check if its the one for
+		which the logs need to be read. Ignore the container which do not match the ACCEPTLOGID.
+		If the Container has LOGSPOUT=ignore set, then ignore it as well.
+		
+		if kvp[0] == "LOGID" && strings.ToLower(kvp[1]) != acceptLogId {
+			//log.Println("The logs from this container will NOT be passed to logstash")			
+			return true 
+		} */
+
+		if kvp[0] == "LOGSPOUT" && strings.ToLower(kvp[1]) == "ignore" {
+			return true 
 		}
+		
 	}
 	excludeLabel := getopt("EXCLUDE_LABEL", "")
 	if value, ok := container.Config.Labels[excludeLabel]; ok {
