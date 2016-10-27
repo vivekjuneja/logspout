@@ -4,5 +4,5 @@ import (
 	_ "github.com/gliderlabs/logspout/adapters/syslog"
 	_ "github.com/gliderlabs/logspout/transports/tcp"
 	_ "github.com/gliderlabs/logspout/transports/udp"
-	_ "gitlab.com/vivekjuneja/logspout-logstash"
+	_ "gitlab.com/itsdp/logspout-logstash"
 )
